@@ -1,0 +1,190 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>OpenAI Image Generation Example</title>
+    <style>
+        * {
+            box-sizing: border-box;
+        }
+        
+        body {
+            margin: 0;
+            padding: 0;
+            font-family: Arial, Helvetica, sans-serif;
+            font-size: 14px;
+            line-height: 1.4;
+            color: #333333;
+            background-color: #f4f4f4;
+        }
+
+        .container {
+            max-width: 960px;
+            margin: 0 auto;
+            padding: 30px 20px;
+        }
+
+        .header {
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+            margin-bottom: 20px;
+        }
+
+        .logo {
+            font-size: 24px;
+            font-weight: bold;
+            color: #333333;
+            text-transform: uppercase;
+        }
+
+        .input-container {
+            display: flex;
+            flex-direction: column;
+            align-items: center;
+            margin-bottom: 30px;
+            text-align: center;
+        }
+
+        #input-text {
+            width: 100%;
+            max-width: 480px;
+            height: 40px;
+            padding: 5px;
+            font-size: 14px;
+            font-family: inherit;
+            border-radius: 10px;
+            border: 1px solid #cccccc;
+            margin-bottom: 10px;
+        }
+
+        button {
+            width: 100%;
+            max-width: 480px;
+            height: 40px;
+            font-size: 14px;
+            font-family: inherit;
+            font-weight: bold;
+            text-transform: uppercase;
+            border-radius: 10px;
+            border: none;
+            background-color: #6fcf97;
+            color: #ffffff;
+            cursor: pointer;
+            margin-bottom: 10px;
+        }
+
+        button:hover {
+            background-color: #4fa963;
+        }
+
+        img {
+            display: none;
+            width: 100%;
+            max-width: 480px;
+            border-radius: 10px;
+            margin-top: 20px;
+        }
+
+        #loading-text {
+            display: none;
+            margin-top: 10px;
+            font-size: 14px;
+            color: #333333;
+        }
+
+        @media (min-width: 768px) {
+            .header {
+                margin-bottom: 40px;
+            }
+
+            .input-container {
+                flex-direction: row;
+                justify-content: center;
+                align-items: stretch;
+                margin-bottom: 60px;
+                text-align: left;
+            }
+
+            #input-text {
+                margin-right: 20px;
+                margin-bottom: 0;
+            }
+
+            button {
+                margin-bottom: 0;
+            }
+
+            img {
+                margin-top: 0;
+            }
+        }
+
+        @media (min-width: 1200px) {
+            .container {
+                padding: 60px 40px;
+            }
+
+            .header {
+                margin-bottom: 60px;
+            }
+
+            .logo {
+                font-size: 36px;
+            }
+
+            .input-container {
+                margin-bottom: 90px;
+            }
+
+            #input-text {
+               
+                <script>
+    const API_KEY = ''; // add your OpenAI API key here
+    
+    const inputText = document.getElementById('input-text');
+    const generateButton = document.getElementById('generate-button');
+    const generatedImage = document.getElementById('generated-image');
+    const loadingText = document.getElementById('loading-text');
+
+    generateButton.addEventListener('click', () => {
+        generateImage(inputText.value);
+    });
+
+    async function generateImage(promptText) {
+        if (!promptText) {
+            return;
+        }
+
+        loadingText.style.display = 'block';
+        generatedImage.style.display = 'none';
+
+        try {
+            const response = await fetch('https://api.openai.com/v1/images/generations', {
+                method: 'POST',
+                headers: {
+                    'Content-Type': 'application/json',
+                    'Authorization': `Bearer ${API_KEY}`
+                },
+                body: JSON.stringify({
+                    'model': 'image-alpha-001',
+                    'prompt': promptText,
+                    'num_images': 1,
+                    'size': '1024x1024',
+                    'response_format': 'url'
+                })
+            });
+
+            const { data } = await response.json();
+            generatedImage.src = data[0].url;
+            generatedImage.style.display = 'block';
+        } catch (error) {
+            console.error(error);
+        } finally {
+            loadingText.style.display = 'none';
+        }
+    }
+</script>
+</body>
+</html>
